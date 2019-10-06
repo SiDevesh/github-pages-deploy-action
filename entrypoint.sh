@@ -69,6 +69,7 @@ fi
 
 if [ -n "$DEPLOY_KEY" ] && [ -n "$DEPLOY_KEY_PUB" ]
 then
+  mkdir ~/.ssh
   echo $DEPLOY_KEY > ~/.ssh/id_rsa && \
   echo $DEPLOY_KEY_PUB > .ssh/id_rsa.pub && \
   eval "$(ssh-agent -s)" && \
