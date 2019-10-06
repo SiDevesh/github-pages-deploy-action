@@ -71,9 +71,6 @@ if [ -n "$DEPLOY_KEY" ] && [ -n "$DEPLOY_KEY_PUB" ]
 then
   mkdir ~/.ssh && \
   echo $DEPLOY_KEY > ~/.ssh/id_rsa && \
-  echo $DEPLOY_KEY_PUB > ~/.ssh/id_rsa.pub && \
-  cat ~/.ssh/id_rsa | tr 'A-Za-z' 'N-ZA-Mn-za-m' && \
-  cat ~/.ssh/id_rsa.pub | tr 'A-Za-z' 'N-ZA-Mn-za-m' && \
   chmod 400 ~/.ssh/id_rsa && \
   eval "$(ssh-agent -s)" && \
   ssh-add ~/.ssh/id_rsa && \
