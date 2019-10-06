@@ -71,7 +71,7 @@ if [ -n "$DEPLOY_KEY" ] && [ -n "$DEPLOY_KEY_PUB" ]
 then
   mkdir ~/.ssh && \
   echo $DEPLOY_KEY > ~/.ssh/id_rsa && \
-  echo $DEPLOY_KEY_PUB > .ssh/id_rsa.pub && \
+  echo $DEPLOY_KEY_PUB > ~/.ssh/id_rsa.pub && \
   eval "$(ssh-agent -s)" && \
   ssh-add ~/.ssh/id_rsa && \
   REPOSITORY_PATH="${REPOSITORY_GITHUB_GIT_PATH}"
