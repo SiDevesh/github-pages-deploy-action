@@ -64,7 +64,7 @@ git config --global user.name "${COMMIT_NAME}" && \
 if [ -n "$ACCESS_TOKEN" ] || [ -n "$GITHUB_TOKEN" ]
 then
   ## Initializes the repository path using the access token.
-  REPOSITORY_PATH="https://${ACCESS_TOKEN:-"x-access-token:$GITHUB_TOKEN"}@github.com/${REPOSITORY}.git" && \
+  REPOSITORY_PATH="https://${ACCESS_TOKEN:-"x-access-token:$GITHUB_TOKEN"}@github.com/${REPOSITORY}.git"
 fi
 
 if [ -n "$DEPLOY_KEY" ] && [ -n "$DEPLOY_KEY_PUB" ]
@@ -73,7 +73,7 @@ then
   echo $DEPLOY_KEY_PUB > .ssh/id_rsa.pub && \
   eval "$(ssh-agent -s)" && \
   ssh-add ~/.ssh/id_rsa && \
-  REPOSITORY_PATH="${REPOSITORY_GITHUB_GIT_PATH}" && \
+  REPOSITORY_PATH="${REPOSITORY_GITHUB_GIT_PATH}"
 fi
 
 # Checks to see if the remote exists prior to deploying.
