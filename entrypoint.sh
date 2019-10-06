@@ -74,7 +74,7 @@ then
   echo $DEPLOY_KEY_PUB > ~/.ssh/id_rsa.pub && \
   chmod 400 ~/.ssh/id_rsa && \
   eval "$(ssh-agent -s)" && \
-  yes "" | ssh-add ~/.ssh/id_rsa && \
+  echo | ssh-add ~/.ssh/id_rsa && \
   REPOSITORY_PATH="${REPOSITORY_GITHUB_GIT_PATH}"
 fi
 
