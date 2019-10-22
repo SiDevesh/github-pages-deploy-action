@@ -58,6 +58,11 @@ then
   BASE_DIRECTORY=$(pwd)
 fi
 
+case "$BASE_DIRECTORY" in /*|./*)
+  echo "The base directory folder cannot be prefixed with '/' or './'. Instead reference the folder name directly."
+  exit 1
+esac
+
 # Directs the action to the the Github workspace.
 cd $GITHUB_WORKSPACE && \
 
