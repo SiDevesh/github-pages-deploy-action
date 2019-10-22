@@ -53,6 +53,11 @@ then
   COMMIT_NAME="${GITHUB_ACTOR:-GitHub Pages Deploy Action}"
 fi
 
+if [ -z "$BASE_DIRECTORY" ]
+then
+  BASE_DIRECTORY=$(pwd)
+fi
+
 # Directs the action to the the Github workspace.
 cd $GITHUB_WORKSPACE && \
 
@@ -93,11 +98,19 @@ then
 fi
 
 # Checks out the base branch to begin the deploy process.
-git checkout "${BASE_BRANCH:-master}" && \
+git checkout "${BASE_BRANCH:-master}"
+
+# Move to base directory before executing build script,
+# before that save the current directory to return back to after build script is executed
+cwd=$(pwd)
+cd $(echo $BASE_DIRECTORY)
 
 # Builds the project if a build script is provided.
 echo "Running build scripts... $BUILD_SCRIPT" && \
-eval "$BUILD_SCRIPT" && \
+eval "$BUILD_SCRIPT"
+
+# Move back to the working directory before moving to base directory
+cd $(echo $cwd)
 
 if [ "$CNAME" ]; then
   echo "Generating a CNAME file in in the $FOLDER directory..."
