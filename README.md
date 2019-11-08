@@ -48,6 +48,9 @@ Below you'll find a description of what each option does.
 | ------------- | ------------- | ------------- | ------------- |
 | `GITHUB_TOKEN`  | In order for GitHub to trigger the rebuild of your page you must provide the action with the repositories provided GitHub token. This can be referenced in the workflow `yml` file by using `${{ secrets.GITHUB_TOKEN }}`. Only required if an access token is **not** provided. **Please note there is currently an issue affecting the use of this token, [you can learn more here](https://github.com/JamesIves/github-pages-deploy-action/issues/5)**. | `secrets` | **Yes** |
 | `ACCESS_TOKEN`  | Depending on the repository permissions you may need to provide the action with a GitHub personal access token instead of the provided GitHub token in order to deploy. You can [learn more about how to generate one here](https://help.github.com/en/articles/creating-a-personal-access-token-for-the-command-line). **This should be stored as a secret**. | `secrets` | **No** |
+| `DEPLOY_KEY`  | ... | `env` | **No** |
+| `DEPLOY_KEY_PUB`  | ... | `env` | **No** |
+| `REPOSITORY_GITHUB_GIT_PATH`  | ... | `env` | **No** |
 | `BRANCH`  | This is the branch you wish to deploy to, for example `gh-pages` or `docs`.  | `env` | **Yes** |
 | `FOLDER`  | The folder in your repository that you want to deploy. If your build script compiles into a directory named `build` you'd put it here. **Folder paths cannot have a leading `/` or `./`**. | `env` | **Yes** |
 | `BASE_DIRECTORY`  | The folder in your repository that you want to move to before executing the build command. **Folder paths cannot have a leading `/` or `./`**. | `env` | **No** |
