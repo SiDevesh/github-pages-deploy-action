@@ -75,9 +75,9 @@ git config --global user.name "${COMMIT_NAME}" && \
 ## Initializes the repository path using the access token or without it if ssh is to be used
 if [ "$USE_SSH" != "true" ]
 then
-  REPOSITORY_PATH="https://${ACCESS_TOKEN:-"x-access-token:$GITHUB_TOKEN"}@github.com/${REPOSITORY}.git"
+  REPOSITORY_PATH="https://${ACCESS_TOKEN:-"x-access-token:$GITHUB_TOKEN"}@GitHub.com/${REPOSITORY}.git"
  else
-  REPOSITORY_PATH="git@github.com:${REPOSITORY}.git"
+  REPOSITORY_PATH="git@GitHub.com:${REPOSITORY}.git"
 fi
 
 # Checks to see if the remote exists prior to deploying.
