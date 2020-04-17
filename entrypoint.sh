@@ -80,6 +80,8 @@ then
   REPOSITORY_PATH="git@GitHub.com:${REPOSITORY}.git"
 fi
 
+echo $REPOSITORY_PATH
+
 # Checks to see if the remote exists prior to deploying.
 # If the branch doesn't exist it gets created here as an orphan.
 if [ "$(git ls-remote --heads "$REPOSITORY_PATH" "$BRANCH" | wc -l)" -eq 0 ];
