@@ -4,9 +4,9 @@ set -e
 
 
 
-if [ -z "$ACCESS_TOKEN" ] && [ -z "$GITHUB_TOKEN" ] && ([ -z "$DEPLOY_KEY" ] || [ -z "$DEPLOY_KEY_PUB" ] || [ -z "$REPOSITORY_GITHUB_GIT_PATH" ])
+if [ -z "$ACCESS_TOKEN" ] && [ -z "$GITHUB_TOKEN" ]
 then
-  echo "You must provide the action with either a Personal Access Token or the GitHub Token secret or Deployment public private key pairs with full repository path in order to deploy."
+  echo "You must provide the action with either a Personal Access Token or the GitHub Token secret in order to deploy."
   exit 1
 fi
 
@@ -53,15 +53,13 @@ then
   COMMIT_NAME="${GITHUB_ACTOR:-GitHub Pages Deploy Action}"
 fi
 
-if [ -z "$BASE_DIRECTORY" ]
+if [ -n "$BASE_DIRECTORY" ]
 then
-  BASE_DIRECTORY=$(pwd)
+  case "$BASE_DIRECTORY" in /*|./*)
+    echo "The base directory folder cannot be prefixed with '/' or './'. Instead reference the folder name directly."
+    exit 1
+  esac
 fi
-
-case "$BASE_DIRECTORY" in /*|./*)
-  echo "The base directory folder cannot be prefixed with '/' or './'. Instead reference the folder name directly."
-  exit 1
-esac
 
 # Directs the action to the the Github workspace.
 cd $GITHUB_WORKSPACE && \
@@ -71,22 +69,8 @@ git init && \
 git config --global user.email "${COMMIT_EMAIL}" && \
 git config --global user.name "${COMMIT_NAME}" && \
 
-if [ -n "$ACCESS_TOKEN" ] || [ -n "$GITHUB_TOKEN" ]
-then
-  ## Initializes the repository path using the access token.
-  REPOSITORY_PATH="https://${ACCESS_TOKEN:-"x-access-token:$GITHUB_TOKEN"}@github.com/${REPOSITORY}.git"
-fi
-
-if [ -n "$DEPLOY_KEY" ] && [ -n "$DEPLOY_KEY_PUB" ]
-then
-  mkdir ~/.ssh && \
-  echo $DEPLOY_KEY > ~/.ssh/id_rsa && \
-  echo $DEPLOY_KEY_PUB > ~/.ssh/id_rsa.pub && \
-  chmod 400 ~/.ssh/id_rsa && \
-  eval "$(ssh-agent -s)" && \
-  ssh-add ~/.ssh/id_rsa && \
-  REPOSITORY_PATH="${REPOSITORY_GITHUB_GIT_PATH}"
-fi
+## Initializes the repository path using the access token.
+REPOSITORY_PATH="https://${ACCESS_TOKEN:-"x-access-token:$GITHUB_TOKEN"}@github.com/${REPOSITORY}.git"
 
 # Checks to see if the remote exists prior to deploying.
 # If the branch doesn't exist it gets created here as an orphan.
@@ -108,7 +92,10 @@ git checkout "${BASE_BRANCH:-master}"
 # Move to base directory before executing build script,
 # before that save the current directory to return back to after build script is executed
 cwd=$(pwd)
-cd $(echo $BASE_DIRECTORY)
+if [ -n "$BASE_DIRECTORY" ]
+then
+  cd $(echo $BASE_DIRECTORY)
+fi
 
 # Builds the project if a build script is provided.
 echo "Running build scripts... $BUILD_SCRIPT" && \

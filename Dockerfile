@@ -10,7 +10,4 @@ LABEL "homepage"="http://github.com/JamesIves/gh-pages-gh-action"
 LABEL "maintainer"="James Ives <iam@jamesiv.es>"
 
 ADD entrypoint.sh /entrypoint.sh
-RUN echo "StrictHostKeyChecking no" >> /etc/ssh/ssh_config
-RUN echo "UserKnownHostsFile /dev/null" >> /etc/ssh/ssh_config
-RUN echo "LogLevel QUIET" >> /etc/ssh/ssh_config
 ENTRYPOINT ["/entrypoint.sh"]
