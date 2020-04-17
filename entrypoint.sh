@@ -2,9 +2,14 @@
 
 set -e
 
-if [ -z "$ACCESS_TOKEN" ] && [ -z "$GITHUB_TOKEN" ]
+if [ -z "$USE_SSH" ]
 then
-  echo "You must provide the action with either a Personal Access Token or the GitHub Token secret in order to deploy."
+  USE_SSH="false"
+fi
+
+if [ -z "$ACCESS_TOKEN" ] && [ -z "$GITHUB_TOKEN" ] && [ "$USE_SSH" != "true" ]
+then
+  echo "You must provide the action with either a Personal Access Token or the GitHub Token secret in order to deploy, or you can set USE_SSH as true and configure ssh in a preceeding step."
   exit 1
 fi
 
@@ -67,8 +72,13 @@ git init && \
 git config --global user.email "${COMMIT_EMAIL}" && \
 git config --global user.name "${COMMIT_NAME}" && \
 
-## Initializes the repository path using the access token.
-REPOSITORY_PATH="https://${ACCESS_TOKEN:-"x-access-token:$GITHUB_TOKEN"}@github.com/${REPOSITORY}.git" && \
+## Initializes the repository path using the access token or without it if ssh is to be used
+if [ "$USE_SSH" != "true" ]
+then
+  REPOSITORY_PATH="https://${ACCESS_TOKEN:-"x-access-token:$GITHUB_TOKEN"}@github.com/${REPOSITORY}.git"
+ else
+  REPOSITORY_PATH="git@github.com:${REPOSITORY}.git"
+fi
 
 # Checks to see if the remote exists prior to deploying.
 # If the branch doesn't exist it gets created here as an orphan.
